@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">NoteBook</string>
+    <string name="edit_activity_name">新便签</string>
+    <string name="action_settings">Settings</string>
+</resources>
