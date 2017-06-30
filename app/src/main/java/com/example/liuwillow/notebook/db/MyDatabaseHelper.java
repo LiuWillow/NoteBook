@@ -11,17 +11,16 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
-    private Context mContext;
     public static final String CREATE_NOTES_TABLE = "create table Notes ("
-            + "id integer primary key autoincrement,"
+            + "md5 text primary key,"
             + "title text,"
             + "content text,"
             + "date text)";
-    public static final String CREATE_DRAFTS_TABLE = "create table Drafts ("
-            + "id integer primary key autoincrement,"
+   /* public static final String CREATE_DRAFTS_TABLE = "create table Drafts ("
+            + "md5 text primary key,"
             + "title text,"
             + "content text,"
-            + "date text )";
+            + "date text )";*/
     public MyDatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
@@ -33,7 +32,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_NOTES_TABLE);
-        db.execSQL(CREATE_DRAFTS_TABLE);
+        //db.execSQL(CREATE_DRAFTS_TABLE);
     }
 
     @Override

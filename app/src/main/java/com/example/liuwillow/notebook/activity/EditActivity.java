@@ -1,74 +1,93 @@
 package com.example.liuwillow.notebook.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.liuwillow.notebook.MainActivity;
 import com.example.liuwillow.notebook.R;
 import com.example.liuwillow.notebook.bean.Note;
 import com.example.liuwillow.notebook.db.MyDatabase;
+import com.example.liuwillow.notebook.presenter.EditPresenterImpl;
+import com.example.liuwillow.notebook.presenter.IBaseActivity;
+import com.example.liuwillow.notebook.utils.MathUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by liuwillow on 17-6-22.
  */
 
-public class EditActivity extends AppCompatActivity {
+public class EditActivity extends AppCompatActivity{
     LinearLayout container;
     EditText titleText;
     EditText contentText;
     Toolbar toolbar;
+    private EditPresenterImpl editPresenter;
+    private String md5;
 
     private static final String TAG = "EditActivity";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.edit_layout);
+        initView();
+        initListener();
+        editPresenter = new EditPresenterImpl(this);
 
+        if(getIntent().getExtras() != null){
+            Note note = (Note)getIntent().getExtras().getSerializable("note");
+            titleText.setText(note.getTitle());
+            contentText.setText(note.getContent());
+            md5 = note.getMd5();
+        }
 
+    }
+
+    private void initView(){
         container = (LinearLayout) findViewById(R.id.container);
-
         titleText = (EditText)findViewById(R.id.title_text);
         contentText = (EditText)findViewById(R.id.content_text);
         toolbar = (Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+    }
+
+    private void initListener(){
         container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 contentText.requestFocus();
 
-                    InputMethodManager imm= (InputMethodManager)contentText.getContext()
-                            .getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+                InputMethodManager imm= (InputMethodManager)contentText.getContext()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
 
             }
         });
-/*
-        String title = getIntent().getStringExtra("title");
-        String content = getIntent().getStringExtra("content");*/
-        if(getIntent().getExtras() != null){
-
-            Note note = (Note)getIntent().getExtras().getSerializable("note");
-            titleText.setText(note.getTitle());
-            contentText.setText(note.getContent());
-        }
-
-
     }
 
     @Override
@@ -82,26 +101,52 @@ public class EditActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id){
             case R.id.submit_item:
-                saveNote();
+                Note note = getNote();
+                if(note.getContent() != null && note.getContent().length() != 0){
+                    if(getIntent().getExtras() != null){
+                        editPresenter.updateNote(md5, note);
+                        Toast.makeText(this, "更改成功", Toast.LENGTH_SHORT).show();
+                        goMainActivity();
+                        finish();
+                    }else{
+                        editPresenter.saveNote(note);
+                        Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
+                        goMainActivity();
+                        finish();
+                    }
+                }
+                break;
+            case android.R.id.home:
+                goMainActivity();
+                finish();
         }
         return true;
     }
 
-    private void saveNote(){
+    private void goMainActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    private Note getNote(){
         Note note = new Note();
+        SimpleDateFormat formatter = new SimpleDateFormat ("yyyy年MM月dd日");
+        Date curDate = new Date(System.currentTimeMillis());
+        String date = formatter.format(curDate);
+
         String title = titleText.getText().toString();
         String content = contentText.getText().toString();
-        if(title.length() <= 0 || content.length() <= 0){
-            Toast.makeText(this, "未输入内容！", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, title);
+        if(title.length() == 0 || content.length() == 0){
+            Toast.makeText(this, "未输入标题或内容！", Toast.LENGTH_SHORT).show();
         }
         else{
             note.setTitle(title);
             note.setContent(content);
-            MyDatabase.getInstance(this).saveNote(note);
-            Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
-            finish();
+            note.setMd5(MathUtils.getMd5(title));
+            note.setDate(date);
         }
-
+        return note;
     }
 
     @Override
@@ -127,4 +172,7 @@ public class EditActivity extends AppCompatActivity {
         super.onStop();
         Log.d(TAG, "onStop");
     }
+
+
+
 }

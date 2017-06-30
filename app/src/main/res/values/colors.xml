@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3DDB9F</color>
-    <color name="colorPrimaryDark">#3DDB9F</color>
-    <color name="colorAccent">#3DDB9F</color>
+    <color name="colorPrimary">#33cc99</color>
+    <color name="colorPrimaryDark">#33cc99</color>
+    <color name="colorAccent">#33cc99</color>
     <color name="colorBackground">#eeeeee</color>
     <color name="colorItemBackground">#ffffff</color>
-    <color name="colorItemSelected">#ffffaa</color>
+    <color name="colorItemSelected">#dddddd</color>
     <color name="white">#fff</color>
-
+    <color name="colorNoDataBackgroung">#33cc99</color>
+    <color name="colorNoDataTopPressed">#11aa77</color>
+    <color name="colorTintText">#bbbbbb</color>
 </resources>

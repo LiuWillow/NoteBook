@@ -5,19 +5,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.liuwillow.notebook.R;
 import com.example.liuwillow.notebook.activity.EditActivity;
 import com.example.liuwillow.notebook.bean.Note;
 import com.example.liuwillow.notebook.db.MyDatabase;
+import com.example.liuwillow.notebook.presenter.IBaseActivity;
+import com.example.liuwillow.notebook.presenter.MainPresenterImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import me.drakeet.materialdialog.MaterialDialog;
 
 /**
  * Created by liuwillow on 17-6-22.
@@ -26,9 +32,18 @@ import java.util.List;
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     private Context mContext;
     private List<Note> datas = new ArrayList<>();
+    private MyDatabase myDatabase;
+    private IBaseActivity iBaseActivity;
+
     public NoteAdapter(Context mContext){
-        this.mContext = mContext;
+        this(mContext, null);
     }
+    public NoteAdapter(Context mContext, IBaseActivity iBaseActivity){
+        this.mContext = mContext;
+        myDatabase = MyDatabase.getInstance(mContext);
+        this.iBaseActivity = iBaseActivity;
+    }
+
     @Override
     public NoteHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.notes_item_layout,parent,false);
@@ -38,23 +53,61 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     @Override
     public void onBindViewHolder(final NoteHolder holder, int position) {
         final int t = datas.size() - position -1;
-        holder.titleText.setText(datas.get(t).getTitle());
-        holder.contentText.setText(datas.get(t).getContent());
-        // holder.dateText.setText(datas.get(t).getDate());
+        holder.titleText.setText("标题：   " + datas.get(t).getTitle());
+        holder.contentText.setText("内容:   " + datas.get(t).getContent());
 
+        holder.contentText.setSingleLine();
+        holder.contentText.setEllipsize(TextUtils.TruncateAt.valueOf("END"));
+        holder.contentText.setEms(7);
+        holder.dateText.setText(datas.get(t).getDate());
 
+        final Note note = datas.get(t);
 
 
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, EditActivity.class);
-                Note note = datas.get(t);
+
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("note", note);
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
+            }
+        });
 
+
+        holder.container.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(iBaseActivity != null){
+                    final MaterialDialog materialDialog = new MaterialDialog(mContext)
+                            .setMessage("是否删除便签")
+                            .setCanceledOnTouchOutside(true);
+
+                    materialDialog.setPositiveButton("是", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            myDatabase.deleteNote(note);
+                            datas.remove(t);
+                            notifyDataSetChanged();
+                            if(datas == null || datas.size() == 0){
+                                iBaseActivity.showTint();
+                            }
+
+                            Toast.makeText(mContext,"删除成功",Toast.LENGTH_SHORT).show();
+                            materialDialog.dismiss();
+                        }
+                    })
+                            .setNegativeButton("取消", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    materialDialog.dismiss();
+                                }
+                            }).show();
+                }
+
+                return true;
             }
         });
     }
@@ -70,7 +123,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             notifyDataSetChanged();
         }else{
             datas.clear();
-            datas = arrayLists;
+            datas.addAll(arrayLists);
         }
 
 

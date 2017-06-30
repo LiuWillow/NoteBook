@@ -43,15 +43,50 @@
         </android.support.v7.widget.Toolbar>
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_below="@id/toolbar"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linear_nodata"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="260dp" >
+            <LinearLayout
+                android:background="@drawable/linearnodata_top_bg"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="0dp"
+                android:layout_weight="4">
+                <TextView
+                    android:text="计划每一天"
+                    android:textSize="@dimen/textsize_maintint"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+            <LinearLayout
+                android:background="@drawable/item_tab_style"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="6"
+                >
+                <TextView
+                    android:layout_margin="20dp"
+                    android:text="点击编辑你的第一个便签"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -60,7 +95,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/button_tab"
+        android:src="@drawable/plus"
         />
 
 </RelativeLayout>

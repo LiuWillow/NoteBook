@@ -1,4 +1,6 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="textsize_toolbar">25dp</dimen>
+    <dimen name="textsize_maintint">25dp</dimen>
+    <dimen name="text_space">8dp</dimen>
 </resources>

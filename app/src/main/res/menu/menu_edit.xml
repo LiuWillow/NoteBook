@@ -4,6 +4,7 @@
     <item
         android:id="@+id/submit_item"
         android:title="submit"
-        app:showAsAction="never"
+        android:icon="@drawable/tick"
+        app:showAsAction="ifRoom"
         />
 </menu>

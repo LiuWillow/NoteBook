@@ -10,6 +10,7 @@ public class Note implements Serializable{
     private String date;
     private String title;
     private String content;
+    private String md5;
 
     public String getDate() {
         return date;
@@ -33,5 +34,13 @@ public class Note implements Serializable{
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
     }
 }
