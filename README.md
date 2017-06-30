@@ -4,7 +4,7 @@
 
 
 ## Screenshots
-<img src="screenshots/note.gif" width="330"  hspace="20">
+<img src="ScreenShots/note.gif" width="330"  hspace="20">
 
 
 
