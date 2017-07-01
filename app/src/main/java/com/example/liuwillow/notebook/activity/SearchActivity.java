@@ -1,5 +1,6 @@
 package com.example.liuwillow.notebook.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
@@ -12,6 +13,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.liuwillow.notebook.MainActivity;
 import com.example.liuwillow.notebook.R;
 import com.example.liuwillow.notebook.adapter.NoteAdapter;
 import com.example.liuwillow.notebook.bean.Note;
@@ -57,7 +59,9 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                goMainActivity();
                 finish();
+
                 return true;
             default:
                 break;
@@ -79,5 +83,16 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
             adapter.setDatas(notes);
         }
         return true;
+    }
+    private void goMainActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        goMainActivity();
+        finish();
     }
 }

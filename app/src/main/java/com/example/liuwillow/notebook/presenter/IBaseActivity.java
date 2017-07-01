@@ -11,4 +11,5 @@ import java.util.List;
 public interface IBaseActivity {
     void updateNotes(List<Note> notes);
     void showTint();
+    void finishThis();
 }

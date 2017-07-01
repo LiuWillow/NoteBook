@@ -73,6 +73,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
                 bundle.putSerializable("note", note);
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
+
+                iBaseActivity.finishThis();
             }
         });
 

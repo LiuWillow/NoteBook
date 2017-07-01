@@ -9,8 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -65,13 +63,14 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity{
             @Override
             public void onClick(View view) {
                 goEditActivity();
+                finish();
             }
         });
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-                startActivity(intent);
+                goSearchActivity();
+                finish();
             }
         });
         linearNoData.setOnClickListener(new View.OnClickListener() {
@@ -95,8 +94,18 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity{
         linearNoData.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void finishThis() {
+        finish();
+    }
+
     private void goEditActivity(){
         Intent intent = new Intent(MainActivity.this, EditActivity.class);
+        startActivity(intent);
+    }
+
+    private void goSearchActivity(){
+        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
         startActivity(intent);
     }
 

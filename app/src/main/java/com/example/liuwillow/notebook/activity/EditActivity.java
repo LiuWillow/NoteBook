@@ -33,6 +33,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import me.drakeet.materialdialog.MaterialDialog;
+
 /**
  * Created by liuwillow on 17-6-22.
  */
@@ -44,6 +46,7 @@ public class EditActivity extends AppCompatActivity{
     Toolbar toolbar;
     private EditPresenterImpl editPresenter;
     private String md5;
+    private Note noteOld;
 
     private static final String TAG = "EditActivity";
     @Override
@@ -57,10 +60,10 @@ public class EditActivity extends AppCompatActivity{
         editPresenter = new EditPresenterImpl(this);
 
         if(getIntent().getExtras() != null){
-            Note note = (Note)getIntent().getExtras().getSerializable("note");
-            titleText.setText(note.getTitle());
-            contentText.setText(note.getContent());
-            md5 = note.getMd5();
+            noteOld = (Note)getIntent().getExtras().getSerializable("note");
+            titleText.setText(noteOld.getTitle());
+            contentText.setText(noteOld.getContent());
+            md5 = noteOld.getMd5();
         }
 
     }
@@ -99,9 +102,10 @@ public class EditActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        final Note note = getNote();
         switch (id){
             case R.id.submit_item:
-                Note note = getNote();
+
                 if(note.getContent() != null && note.getContent().length() != 0){
                     if(getIntent().getExtras() != null){
                         editPresenter.updateNote(md5, note);
@@ -117,8 +121,53 @@ public class EditActivity extends AppCompatActivity{
                 }
                 break;
             case android.R.id.home:
-                goMainActivity();
-                finish();
+                String title = titleText.getText().toString();
+                String content = contentText.getText().toString();
+                if(title.length() == 0 || content.length() == 0){
+                    goMainActivity();
+                    finish();
+                }else{
+
+                    if (note.getContent() != null && note.getContent().length() != 0){
+
+                        final MaterialDialog materialDialog = new MaterialDialog(this)
+                                .setMessage("便签未保存，")
+                                .setCanceledOnTouchOutside(true);
+
+                        materialDialog.setPositiveButton("保存", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if(getIntent().getExtras() != null){
+                                    editPresenter.updateNote(md5, note);
+
+                                    finish();
+                                    goMainActivity();
+                                    Toast.makeText(EditActivity.this,"保存成功",Toast.LENGTH_SHORT).show();
+                                    materialDialog.dismiss();
+                                }else {
+                                    editPresenter.saveNote(note);
+                                    finish();
+                                    goMainActivity();
+                                    Toast.makeText(EditActivity.this,"保存成功",Toast.LENGTH_SHORT).show();
+                                    materialDialog.dismiss();
+                                }
+
+                            }
+                        })
+                                .setNegativeButton("退出", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        finish();
+                                        goMainActivity();
+                                        materialDialog.dismiss();
+                                    }
+                                }).show();
+
+                    }else{
+                        goMainActivity();
+                        finish();
+                    }
+                }
         }
         return true;
     }
@@ -130,9 +179,6 @@ public class EditActivity extends AppCompatActivity{
 
     private Note getNote(){
         Note note = new Note();
-        SimpleDateFormat formatter = new SimpleDateFormat ("yyyy年MM月dd日");
-        Date curDate = new Date(System.currentTimeMillis());
-        String date = formatter.format(curDate);
 
         String title = titleText.getText().toString();
         String content = contentText.getText().toString();
@@ -141,6 +187,10 @@ public class EditActivity extends AppCompatActivity{
             Toast.makeText(this, "未输入标题或内容！", Toast.LENGTH_SHORT).show();
         }
         else{
+            SimpleDateFormat formatter = new SimpleDateFormat ("yyyy年MM月dd日");
+            Date curDate = new Date(System.currentTimeMillis());
+            String date = formatter.format(curDate);
+
             note.setTitle(title);
             note.setContent(content);
             note.setMd5(MathUtils.getMd5(title));
@@ -173,6 +223,53 @@ public class EditActivity extends AppCompatActivity{
         Log.d(TAG, "onStop");
     }
 
+    @Override
+    public void onBackPressed() {
+        String title = titleText.getText().toString();
+        String content = contentText.getText().toString();
+        if(title.length() == 0 || content.length() == 0){
+            goMainActivity();
+            finish();
+        }else{
 
+            final Note note = getNote();
+            if (note.getContent() != null && note.getContent().length() != 0){
 
-}
+                final MaterialDialog materialDialog = new MaterialDialog(this)
+                        .setMessage("便签未保存，")
+                        .setCanceledOnTouchOutside(true);
+
+                materialDialog.setPositiveButton("保存", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(getIntent().getExtras() != null){
+                            editPresenter.updateNote(md5, note);
+
+                            finish();
+                            goMainActivity();
+                            Toast.makeText(EditActivity.this,"保存成功",Toast.LENGTH_SHORT).show();
+                            materialDialog.dismiss();
+                        }else {
+                            editPresenter.saveNote(note);
+                            finish();
+                            goMainActivity();
+                            Toast.makeText(EditActivity.this,"保存成功",Toast.LENGTH_SHORT).show();
+                            materialDialog.dismiss();
+                        }
+
+                    }
+                })
+                        .setNegativeButton("退出", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                finish();
+                                goMainActivity();
+                                materialDialog.dismiss();
+                            }
+                        }).show();
+            }else{
+                goMainActivity();
+                finish();
+            }
+        }
+}}
