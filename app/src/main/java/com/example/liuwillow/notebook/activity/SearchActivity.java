@@ -18,6 +18,7 @@ import com.example.liuwillow.notebook.R;
 import com.example.liuwillow.notebook.adapter.NoteAdapter;
 import com.example.liuwillow.notebook.bean.Note;
 import com.example.liuwillow.notebook.db.MyDatabase;
+import com.example.liuwillow.notebook.presenter.IBaseActivity;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ import java.util.List;
  * Created by liuwillow on 17-6-28.
  */
 
-public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
+public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, IBaseActivity{
     Toolbar toolbar;
     SearchView searchView;
     NoteAdapter adapter;
@@ -35,7 +36,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_layout);
         toolbar = (Toolbar)findViewById(R.id.toolbar);
-        adapter = new NoteAdapter(this);
+        adapter = new NoteAdapter(this, this);
         recyclerView = (RecyclerView)findViewById(R.id.recycle);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -93,6 +94,21 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     public void onBackPressed() {
         super.onBackPressed();
         goMainActivity();
+        finish();
+    }
+
+    @Override
+    public void updateNotes(List<Note> notes) {
+
+    }
+
+    @Override
+    public void showTint() {
+
+    }
+
+    @Override
+    public void finishThis() {
         finish();
     }
 }
