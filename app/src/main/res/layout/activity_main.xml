@@ -65,7 +65,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="4">
                 <TextView
-                    android:text="计划每一天"
+                    android:text="计划每一天！"
                     android:textSize="@dimen/textsize_maintint"
                     android:textColor="@color/white"
                     android:gravity="center"

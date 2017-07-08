@@ -2,19 +2,14 @@ package com.example.liuwillow.notebook.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -24,14 +19,11 @@ import android.widget.Toast;
 import com.example.liuwillow.notebook.MainActivity;
 import com.example.liuwillow.notebook.R;
 import com.example.liuwillow.notebook.bean.Note;
-import com.example.liuwillow.notebook.db.MyDatabase;
 import com.example.liuwillow.notebook.presenter.EditPresenterImpl;
-import com.example.liuwillow.notebook.presenter.IBaseActivity;
 import com.example.liuwillow.notebook.utils.MathUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import me.drakeet.materialdialog.MaterialDialog;
 
@@ -57,7 +49,7 @@ public class EditActivity extends AppCompatActivity{
         setContentView(R.layout.edit_layout);
         initView();
         initListener();
-        editPresenter = new EditPresenterImpl(this);
+        editPresenter = new EditPresenterImpl();
 
         if(getIntent().getExtras() != null){
             noteOld = (Note)getIntent().getExtras().getSerializable("note");

@@ -3,7 +3,6 @@ package com.example.liuwillow.notebook.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -16,9 +15,10 @@ import android.widget.Toast;
 import com.example.liuwillow.notebook.R;
 import com.example.liuwillow.notebook.activity.EditActivity;
 import com.example.liuwillow.notebook.bean.Note;
-import com.example.liuwillow.notebook.db.MyDatabase;
 import com.example.liuwillow.notebook.presenter.IBaseActivity;
-import com.example.liuwillow.notebook.presenter.MainPresenterImpl;
+import com.example.liuwillow.notebook.utils.DbUtils;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,15 +32,10 @@ import me.drakeet.materialdialog.MaterialDialog;
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     private Context mContext;
     private List<Note> datas = new ArrayList<>();
-    private MyDatabase myDatabase;
     private IBaseActivity iBaseActivity;
 
-    public NoteAdapter(Context mContext){
-        this(mContext, null);
-    }
     public NoteAdapter(Context mContext, IBaseActivity iBaseActivity){
         this.mContext = mContext;
-        myDatabase = MyDatabase.getInstance(mContext);
         this.iBaseActivity = iBaseActivity;
     }
 
@@ -90,7 +85,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
                     materialDialog.setPositiveButton("是", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            myDatabase.deleteNote(note);
+                            DbUtils.deleteNote(note);
                             datas.remove(t);
                             notifyDataSetChanged();
                             if(datas == null || datas.size() == 0){

@@ -36,4 +36,12 @@ public class MathUtils {
 
         return hexValue.toString();
     }
+
+    public static int max(int i, int j){
+        if(i <= j){
+            return j;
+        }else {
+            return i;
+        }
+    }
 }

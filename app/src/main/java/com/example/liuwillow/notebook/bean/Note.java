@@ -1,12 +1,14 @@
 package com.example.liuwillow.notebook.bean;
 
+import org.litepal.crud.DataSupport;
+
 import java.io.Serializable;
 
 /**
  * Created by liuwillow on 17-6-22.
  */
 
-public class Note implements Serializable{
+public class Note extends DataSupport implements Serializable{
     private String date;
     private String title;
     private String content;

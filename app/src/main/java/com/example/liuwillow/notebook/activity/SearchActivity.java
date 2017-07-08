@@ -17,8 +17,8 @@ import com.example.liuwillow.notebook.MainActivity;
 import com.example.liuwillow.notebook.R;
 import com.example.liuwillow.notebook.adapter.NoteAdapter;
 import com.example.liuwillow.notebook.bean.Note;
-import com.example.liuwillow.notebook.db.MyDatabase;
 import com.example.liuwillow.notebook.presenter.IBaseActivity;
+import com.example.liuwillow.notebook.utils.DbUtils;
 
 import java.util.List;
 
@@ -72,7 +72,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        List<Note> notes = MyDatabase.getInstance(this).queryNotes(query);
+        List<Note> notes = DbUtils.queryNotes(query);
         adapter.setDatas(notes);
         return true;
     }
@@ -80,7 +80,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     @Override
     public boolean onQueryTextChange(String newText) {
         if(!TextUtils.isEmpty(newText)){
-            List<Note> notes = MyDatabase.getInstance(this).queryNotes(newText);
+            List<Note> notes = DbUtils.queryNotes(newText);
             adapter.setDatas(notes);
         }
         return true;

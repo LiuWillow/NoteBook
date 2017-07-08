@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal xmlns:android="http://schemas.android.com/apk/res/android">
+    <dbname value="Notes"></dbname>
+    <version value="3"></version>
+
+    <list>
+        <mapping class="com.example.liuwillow.notebook.bean.Note"></mapping>
+    </list>
+</litepal>

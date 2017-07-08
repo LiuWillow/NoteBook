@@ -3,7 +3,9 @@ package com.example.liuwillow.notebook.presenter;
 import android.content.Context;
 
 import com.example.liuwillow.notebook.bean.Note;
-import com.example.liuwillow.notebook.db.MyDatabase;
+import com.example.liuwillow.notebook.utils.DbUtils;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,16 +16,13 @@ import java.util.List;
 
 public class MainPresenterImpl implements IMainPresenter {
     private IBaseActivity iBaseActivity;
-    private MyDatabase db;
-    public MainPresenterImpl(Context mContext, IBaseActivity iBaseActivity){
-        db = MyDatabase.getInstance(mContext);
+    public MainPresenterImpl(IBaseActivity iBaseActivity){
         this.iBaseActivity = iBaseActivity;
     }
 
     @Override
     public void getNotes() {
-        List<Note> notes = new ArrayList<>();
-        notes.addAll(db.loadNotes());
+        List<Note> notes = DbUtils.loadNotes();
         if(notes == null || notes.size() == 0){
             iBaseActivity.showTint();
         }else{
@@ -33,6 +32,6 @@ public class MainPresenterImpl implements IMainPresenter {
 
     @Override
     public void deleteNote(Note note) {
-        db.deleteNote(note);
+        DbUtils.deleteNote(note);
     }
 }

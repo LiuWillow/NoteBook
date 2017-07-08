@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity{
         initView();
         initListener();
         adapter = new NoteAdapter(this,this);
-        mainPresenter = new MainPresenterImpl(this, this);
+        mainPresenter = new MainPresenterImpl(this);
 
         recycle.setAdapter(adapter);
 
